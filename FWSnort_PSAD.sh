@@ -1,6 +1,6 @@
-sudo nano /etc/rsyslog.d/10-iptables.conf
+#Used with ideas @netson from https://gist.github.com/netson/c45b2dc4e835761fbccc
 
- # log kernel generated IPTABLES log messages to file
+sudo printf "# log kernel generated IPTABLES log messages to file
 # each log line will be prefixed by "[IPTABLES]", so search for that
 :msg,contains,"[IPTABLES]" /var/log/iptables.log
 
@@ -8,7 +8,7 @@ sudo nano /etc/rsyslog.d/10-iptables.conf
 # doing this will stop logging kernel generated IPTABLES log messages to the file
 # normally containing kern.* messages (eg, /var/log/kern.log)
 # older versions of ubuntu may require you to change stop to ~
-& stop
+& stop" >  /etc/rsyslog.d/10-iptables.conf
 
  sudo service rsyslog restart
 
@@ -19,7 +19,11 @@ EXTERNAL_NET                !$HOME_NET;
 IPT_SYSLOG_FILE             /var/log/iptables.log;
 Change ENABLE_INTF_LOCAL_NETS to N
 
-printf '$-73i\n# custom psad logging directives\n-A INPUT -j LOG\n-A FORWARD -j LOG\n-A INPUT -j LOG --log-tcp-options --log-prefix "[IPTABLES]"\n-A FORWARD -j LOG --log-tcp-options --log-prefix "[IPTABLES]"\n.\nw\n' | ed -s /etc/ufw/before.rules /etc/ufw/before6.rules /etc/ufw/after.rules /etc/ufw/after6.rules
+printf '$-73i\n# custom psad logging directives\n
+-A INPUT -j LOG\n
+-A FORWARD -j LOG\n
+-A INPUT -j LOG --log-tcp-options --log-prefix "[IPTABLES]"\n
+-A FORWARD -j LOG --log-tcp-options --log-prefix "[IPTABLES]"\n.\nw\n' | ed -s /etc/ufw/before.rules /etc/ufw/before6.rules /etc/ufw/after.rules /etc/ufw/after6.rules
 
 
 
@@ -75,12 +79,11 @@ nano /etc/ufw/before6.rules
 
 
 
-nano /etc/ufw/applications.d/ufw-webmin
-
-[Webmin]
+printf "[Webmin]
 title=Webmin Portal (HTTPS)
 description=Webmin Portal (HTTPS)
-ports=10000/tcp
+ports=10000/tcp" > /etc/ufw/applications.d/ufw-webmin
+
 
 ufw allow to any app Webmin
 
