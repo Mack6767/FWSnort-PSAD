@@ -15,6 +15,7 @@ printf '\n%s\n' "Starting Webmin Installation ......";
   
   exit
 } &> /dev/null
+
 printf '\n%s\n' "Starting UFW and GUFW Installation and configuration ......";
 {
   sudo su
@@ -50,9 +51,12 @@ printf '\n%s\n' "Starting UFW and GUFW Installation and configuration ......";
   # normally containing kern.* messages (eg, /var/log/kern.log)
   # older versions of ubuntu may require you to change stop to ~
   & stop" >> /etc/rsyslog.d/10-iptables.conf
+  
   service rsyslog restart
+  
   exit
 } &> /dev/null
+
 printf '\n%s\n' "Starting PSAD configuration Installation ......";
 {
 # Make manual changes to psad.conf
@@ -76,6 +80,10 @@ UPDATE_RULES_URL        http://rules.emergingthreats.net/fwrules/emerging-IPTABL
 UPDATE_RULES_URL        http://rules.emergingthreats.net/open/snort-2.9.0/emerging-all.rules;
 
 sudo sed -i '18748 s/^/#/' /var/lib/fwsnort/fwsnort.save
+
 sudo /var/lib/fwsnort/fwsnort.sh
+
 fwsnort --update-rules
+
 fwsnort -N --ipt-sync
+} &> /dev/null
