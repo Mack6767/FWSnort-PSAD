@@ -20,7 +20,8 @@ if [[ $install == "Yes" ]]; then
       sed -i.bak '/processed/i\# custom psad logging directives\n-A INPUT -j LOG --log-tcp-options --log-prefix "[IPTABLES] "\n-A FORWARD -j LOG --log-tcp-options --log-prefix "[IPTABLES] "\n' /etc/ufw/before.rules /etc/ufw/before6.rules /etc/ufw/after.rules /etc/ufw/after6.rules
       echo "# log kernel generated IPTABLES log messages to file
       # each log line will be prefixed by "[IPTABLES]", so search for that
-      :msg,contains,"[IPTABLES]" /var/log/iptables.log
+      :msg,contains,"[IPTABLES " /var/log/iptables.log
+      
       # the following stops logging anything that matches the last rule.
       # doing this will stop logging kernel generated IPTABLES log messages to the file
       # normally containing kern.* messages (eg, /var/log/kern.log)
@@ -87,6 +88,7 @@ if [[ $install == "Yes" ]]; then
       IPT_SYSLOG_FILE             /var/log/iptables.log; #Points to the new log created earlier
       ENABLE_INTF_LOCAL_NETS         N; #Prevents PSAD from assuming the network automatically
       EXPECT_TCP_OPTIONS             Y;"
+      psad --sig-update
       psad -K
       psad --fw-include-ips
       exit
