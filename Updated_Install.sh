@@ -33,7 +33,7 @@ if [[ $install == "Yes" ]]; then
       
       fwsnort --update-rules && fwsnort -N --ipt-sync --no-ipt-comments && /var/lib/fwsnort/fwsnort.sh
     } &> /home/${USER}/Documents/ufw_install.log
-elseif [[ $install == "No" ]]; then
+elif [[ $install == "No" ]]; then
 
 cd /home/mack/Downloads/psad/ && perl /home/mack/Downloads/psad/install.pl
 
